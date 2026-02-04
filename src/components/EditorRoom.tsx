@@ -41,33 +41,9 @@ const FileIcon = () => (
   </svg>
 )
 
-const SearchIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M15.25 0a.75.75 0 0 1 .75.75V15.25a.75.75 0 0 1-1.5 0V.75a.75.75 0 0 1 .75-.75zM.75 0a.75.75 0 0 1 .75.75V15.25a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 .75 0zM11 6a5 5 0 1 0-2.26 4.18l2.9 2.9a.75.75 0 1 0 1.06-1.06l-2.88-2.88A5 5 0 0 0 11 6zM6 9.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
-  </svg>
-)
-
-const GitIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5h-3.32zM8 10.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
-  </svg>
-)
-
 const UsersIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor">
     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-  </svg>
-)
-
-const SettingsIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M9.1 4.4L8.6 2H7.4l-.5 2.4-.7.3-2-1.3-.9.8 1.3 2-.2.7-2.4.5v1.2l2.4.5.3.8-1.3 2 .8.8 2-1.3.8.3.4 2.3h1.2l.5-2.4.8-.3 2 1.3.8-.8-1.3-2 .3-.8 2.3-.4V7.4l-2.4-.5-.3-.8 1.3-2-.8-.8-2 1.3-.7-.2zM9.4 1l.5 2.4L12 2.1l2 2-1.4 2.1 2.4.4v2.8l-2.4.5L14 12l-2 2-2.1-1.4-.5 2.4H6.6l-.5-2.4L4 13.9l-2-2 1.4-2.1L1 9.4V6.6l2.4-.5L2 4l2-2 2.1 1.4.4-2.4h2.8zM8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-  </svg>
-)
-
-const CloseIcon = () => (
-  <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
-    <path d="M8 8.707l3.646 3.647.708-.707L8.707 8l3.647-3.646-.707-.708L8 7.293 4.354 3.646l-.708.708L7.293 8l-3.647 3.646.708.708L8 8.707z"/>
   </svg>
 )
 
@@ -93,7 +69,6 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
   const [copied, setCopied] = useState(false)
   const [userName, setUserName] = useState(() => generateName())
   const [userColor] = useState(() => generateColor())
-  const [activeActivity, setActiveActivity] = useState<'files' | 'search' | 'git' | 'extensions' | 'users'>('users')
   
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const ydocRef = useRef<Y.Doc | null>(null)
@@ -240,96 +215,57 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
 
       {/* Main Layout */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Activity Bar */}
+        {/* Activity Bar - Only Collaborators */}
         <div className="w-12 flex flex-col items-center py-2 gap-1" style={{ backgroundColor: '#333333' }}>
           <button
-            onClick={() => { setActiveActivity('files'); setShowSidebar(true) }}
-            className={`activity-icon ${activeActivity === 'files' && showSidebar ? 'active' : ''}`}
-            title="Explorer"
-          >
-            <FileIcon />
-          </button>
-          <button
-            onClick={() => { setActiveActivity('search'); setShowSidebar(true) }}
-            className={`activity-icon ${activeActivity === 'search' && showSidebar ? 'active' : ''}`}
-            title="Search"
-          >
-            <SearchIcon />
-          </button>
-          <button
-            onClick={() => { setActiveActivity('git'); setShowSidebar(true) }}
-            className={`activity-icon ${activeActivity === 'git' && showSidebar ? 'active' : ''}`}
-            title="Source Control"
-          >
-            <GitIcon />
-          </button>
-          <button
-            onClick={() => { setActiveActivity('users'); setShowSidebar(true) }}
-            className={`activity-icon ${activeActivity === 'users' && showSidebar ? 'active' : ''}`}
+            onClick={() => setShowSidebar(!showSidebar)}
+            className={`activity-icon ${showSidebar ? 'active' : ''}`}
             title="Collaborators"
           >
             <UsersIcon />
           </button>
-          <div className="flex-1" />
-          <button
-            className="activity-icon"
-            title="Settings"
-          >
-            <SettingsIcon />
-          </button>
         </div>
 
-        {/* Sidebar */}
+        {/* Sidebar - Collaborators */}
         {showSidebar && (
           <div className="w-60 flex flex-col" style={{ backgroundColor: '#252526' }}>
             <div className="h-9 flex items-center px-4 text-xs font-semibold uppercase tracking-wider" style={{ color: '#bbbbbb' }}>
-              {activeActivity === 'users' ? 'Collaborators' : activeActivity === 'files' ? 'Explorer' : activeActivity}
+              Collaborators
             </div>
             
-            {activeActivity === 'users' && (
-              <div className="flex-1 overflow-auto px-2">
-                {allUsers.map((user, i) => (
-                  <div key={i} className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-white/5">
-                    <div 
-                      className="w-3 h-3 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: user.color }}
-                    />
-                    <span className="text-sm truncate" style={{ color: '#cccccc' }}>
-                      {user.name} {user.isYou && <span style={{ color: '#858585' }}>(you)</span>}
-                    </span>
-                  </div>
-                ))}
-                
-                <div className="mt-4 px-2">
-                  <button
-                    onClick={copyLink}
-                    className="w-full py-1.5 text-xs text-white rounded transition-colors"
-                    style={{ backgroundColor: copied ? '#16825d' : '#0e639c' }}
-                  >
-                    {copied ? '✓ Link Copied!' : 'Copy Invite Link'}
-                  </button>
-                </div>
-                
-                <div className="mt-4 px-2">
-                  <label className="text-xs" style={{ color: '#858585' }}>Your name</label>
-                  <input
-                    type="text"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="vscode-input w-full mt-1"
+            <div className="flex-1 overflow-auto px-2">
+              {allUsers.map((user, i) => (
+                <div key={i} className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-white/5">
+                  <div 
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: user.color }}
                   />
+                  <span className="text-sm truncate" style={{ color: '#cccccc' }}>
+                    {user.name} {user.isYou && <span style={{ color: '#858585' }}>(you)</span>}
+                  </span>
                 </div>
+              ))}
+              
+              <div className="mt-4 px-2">
+                <button
+                  onClick={copyLink}
+                  className="w-full py-1.5 text-xs text-white rounded transition-colors"
+                  style={{ backgroundColor: copied ? '#16825d' : '#0e639c' }}
+                >
+                  {copied ? '✓ Link Copied!' : 'Copy Invite Link'}
+                </button>
               </div>
-            )}
-            
-            {activeActivity === 'files' && (
-              <div className="flex-1 overflow-auto px-2">
-                <div className="flex items-center gap-2 px-2 py-1.5 rounded" style={{ backgroundColor: '#37373d' }}>
-                  <FileIcon />
-                  <span className="text-sm" style={{ color: '#cccccc' }}>{roomId}.md</span>
-                </div>
+              
+              <div className="mt-4 px-2">
+                <label className="text-xs" style={{ color: '#858585' }}>Your name</label>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="vscode-input w-full mt-1"
+                />
               </div>
-            )}
+            </div>
           </div>
         )}
 
@@ -347,9 +283,6 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
             >
               <FileIcon />
               <span className="text-sm">{roomId}.md</span>
-              <button className="p-0.5 hover:bg-white/10 rounded opacity-0 group-hover:opacity-100">
-                <CloseIcon />
-              </button>
             </div>
             <div className="flex-1" />
             <div className="flex items-center gap-1 px-2">
