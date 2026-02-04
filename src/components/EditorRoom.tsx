@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
-import { Awareness } from 'y-protocols/awareness'
+import { WebsocketProvider } from 'y-websocket'
 import PresenceBar from './PresenceBar'
 import MarkdownPreview from './MarkdownPreview'
 
@@ -48,9 +47,9 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
   
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const ydocRef = useRef<Y.Doc | null>(null)
-  const providerRef = useRef<WebrtcProvider | null>(null)
+  const providerRef = useRef<WebsocketProvider | null>(null)
   const ytextRef = useRef<Y.Text | null>(null)
-  const awarenessRef = useRef<Awareness | null>(null)
+  const awarenessRef = useRef<WebsocketProvider['awareness'] | null>(null)
   const isLocalChangeRef = useRef(false)
 
   // Initialize Yjs
@@ -58,24 +57,12 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
     const ydoc = new Y.Doc()
     ydocRef.current = ydoc
 
-    const provider = new WebrtcProvider(`syncpad-${roomId}`, ydoc, {
-      signaling: [
-        'wss://signaling.yjs.dev',
-        'wss://y-webrtc-ckynr.ondigitalocean.app',
-        'wss://signaling.yjs.io'
-      ],
-      // Add STUN servers for better NAT traversal
-      peerOpts: {
-        config: {
-          iceServers: [
-            { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' },
-            { urls: 'stun:global.stun.twilio.com:3478' }
-          ]
-        }
-      }
-    })
+    // Use public Yjs websocket server (more reliable than WebRTC)
+    const provider = new WebsocketProvider(
+      'wss://demos.yjs.dev/ws',
+      `syncpad-${roomId}`,
+      ydoc
+    )
     providerRef.current = provider
 
     const ytext = ydoc.getText('content')
@@ -112,11 +99,19 @@ export default function EditorRoom({ roomId, onLeave }: EditorRoomProps) {
     awareness.on('change', awarenessChangeHandler)
 
     // Connection status
-    provider.on('synced', () => {
-      setIsConnected(true)
-      setText(ytext.toString())
+    provider.on('status', (event: { status: string }) => {
+      setIsConnected(event.status === 'connected')
+    })
+    
+    provider.on('sync', (isSynced: boolean) => {
+      if (isSynced) {
+        setText(ytext.toString())
+      }
     })
 
+    // Initial connection state
+    setIsConnected(provider.wsconnected)
+    
     // Initial text
     setText(ytext.toString())
 
