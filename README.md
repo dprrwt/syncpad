@@ -1,16 +1,16 @@
 # SyncPad 📝
 
-A real-time collaborative text editor built with React, Yjs, and WebRTC. Write together, instantly.
+A real-time collaborative code editor with a VS Code-inspired interface. Built with React, Yjs, and WebSocket sync.
 
 ![SyncPad Preview](https://raw.githubusercontent.com/dprrwt/syncpad/main/.github/preview.png)
 
 ## ✨ Features
 
-- **🔄 Real-time Sync** — Changes appear instantly for all collaborators
-- **🌐 Peer-to-Peer** — No server storage, direct WebRTC connections
-- **👥 Live Presence** — See who's in the room with colored avatars
-- **📝 Markdown Preview** — Toggle between edit and rendered markdown view
-- **🎨 Beautiful UI** — Clean, dark theme with smooth animations
+- **🔄 Real-time Sync** — Changes appear instantly via Yjs CRDT
+- **💻 VS Code UI** — Activity bar, tabs, status bar, line numbers
+- **👥 Live Presence** — See collaborators in the sidebar
+- **📝 Markdown Preview** — Toggle between edit and rendered view
+- **🌙 Dark Theme** — Authentic VS Code color palette
 - **📱 Responsive** — Works on desktop and mobile
 - **🔐 No Account** — Just create a room and share the link
 
@@ -18,20 +18,22 @@ A real-time collaborative text editor built with React, Yjs, and WebRTC. Write t
 
 ### Create a Room
 1. Visit [SyncPad](https://dprrwt.github.io/syncpad)
-2. Click "Create New Room"
+2. Click "New Room"
 3. Share the URL with collaborators
 
 ### Join a Room
 1. Get a room link from someone
-2. Open the link, or
+2. Open the link directly, or
 3. Paste the room code on the homepage
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React + TypeScript + Vite
-- **Styling:** TailwindCSS v4
-- **Real-time:** [Yjs](https://yjs.dev) (CRDT) + [y-webrtc](https://github.com/yjs/y-webrtc)
-- **Markdown:** react-markdown
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React 18 + TypeScript + Vite |
+| **Styling** | TailwindCSS v4 |
+| **Real-time** | [Yjs](https://yjs.dev) (CRDT) + [y-websocket](https://github.com/yjs/y-websocket) |
+| **Markdown** | react-markdown |
 
 ## 💻 Development
 
@@ -52,51 +54,59 @@ npm run build
 
 ## 📖 How It Works
 
-SyncPad uses **Yjs**, a high-performance CRDT (Conflict-free Replicated Data Type) implementation, to handle real-time collaboration. Here's the magic:
+SyncPad uses **Yjs**, a high-performance CRDT (Conflict-free Replicated Data Type) implementation for real-time collaboration:
 
-1. **CRDTs** — Every edit is converted into a conflict-free operation that can be applied in any order
-2. **WebRTC** — Peers connect directly to each other (via signaling servers for discovery)
-3. **Awareness** — User presence and cursors are synced separately from document content
+### Architecture
 
-### Signaling Servers
+```
+┌─────────┐     WebSocket     ┌─────────────────┐     WebSocket     ┌─────────┐
+│ User A  │ ◄───────────────► │  Yjs Sync Server │ ◄───────────────► │ User B  │
+└─────────┘                   └─────────────────┘                   └─────────┘
+     │                                                                    │
+     └──────────────────── Same Y.Doc state ──────────────────────────────┘
+```
 
-The app uses public Yjs signaling servers for peer discovery:
-- `wss://signaling.yjs.dev`
-- `wss://y-webrtc-signaling-eu.herokuapp.com`
-- `wss://y-webrtc-signaling-us.herokuapp.com`
+1. **CRDTs** — Every edit becomes a conflict-free operation that merges automatically
+2. **WebSocket** — All clients connect to `wss://demos.yjs.dev/ws` for sync
+3. **Awareness** — User presence (name, color) synced separately from document
 
-No document content passes through these servers — they only help peers find each other.
+### Sync Server
+
+Uses the public Yjs demo WebSocket server:
+- `wss://demos.yjs.dev/ws`
+
+Document content passes through for sync, but nothing is stored persistently.
+
+## 🎨 VS Code Features
+
+| Feature | Description |
+|---------|-------------|
+| **Activity Bar** | Left sidebar with Files, Search, Git, Collaborators |
+| **Sidebar** | Shows all connected users with colors |
+| **Tabs** | File tabs with active indicator |
+| **Line Numbers** | Classic code editor gutter |
+| **Status Bar** | Live status, collaborator count, line info |
+| **Minimap** | Document overview on the right |
 
 ## 🎯 Use Cases
 
-- **Brainstorming** — Jot down ideas together in real-time
-- **Meeting Notes** — Collaborative note-taking during calls
-- **Quick Sharing** — Share text snippets without creating accounts
-- **Pair Programming** — Write pseudocode or documentation together
-- **Teaching** — Live coding/writing demonstrations
-
-## 📸 Screenshots
-
-### Landing Page
-Clean entry point with room creation and joining options.
-
-### Editor View
-Minimal editor with presence bar showing all collaborators.
-
-### Markdown Preview
-Toggle to see rendered markdown.
+- **Pair Programming** — Write code together in real-time
+- **Meeting Notes** — Collaborative note-taking
+- **Brainstorming** — Jot down ideas together
+- **Teaching** — Live coding demonstrations
+- **Quick Sharing** — Share text without accounts
 
 ## 🤝 Contributing
 
 Contributions welcome! Feel free to:
 - Report bugs
-- Suggest features
+- Suggest features  
 - Submit PRs
 
 ## 📄 License
 
-MIT License — feel free to use this for your own projects!
+MIT License — use freely for your own projects.
 
 ---
 
-Built with ❤️ using [Yjs](https://yjs.dev) for real-time collaboration.
+Built with ❤️ by [dprrwt](https://github.com/dprrwt) using [Yjs](https://yjs.dev)
