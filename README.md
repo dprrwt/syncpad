@@ -2,8 +2,6 @@
 
 A real-time collaborative code editor with a VS Code-inspired interface. Built with React, Yjs, and WebSocket sync.
 
-![SyncPad Preview](https://raw.githubusercontent.com/dprrwt/syncpad/main/.github/preview.png)
-
 ## ✨ Features
 
 - **🔄 Real-time Sync** — Changes appear instantly via Yjs CRDT
@@ -77,11 +75,11 @@ Uses the public Yjs demo WebSocket server:
 
 Document content passes through for sync, but nothing is stored persistently.
 
-## 🎨 VS Code Features
+## 🎨 UI Features
 
 | Feature | Description |
 |---------|-------------|
-| **Activity Bar** | Left sidebar with Files, Search, Git, Collaborators |
+| **Activity Bar** | Collaborators panel toggle |
 | **Sidebar** | Shows all connected users with colors |
 | **Tabs** | File tabs with active indicator |
 | **Line Numbers** | Classic code editor gutter |
