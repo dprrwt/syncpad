@@ -1,25 +1,147 @@
 @import "tailwindcss";
 
-/* Custom scrollbar for dark theme */
+/* VS Code Color Palette */
+:root {
+  --vscode-bg: #1e1e1e;
+  --vscode-sidebar: #252526;
+  --vscode-activitybar: #333333;
+  --vscode-titlebar: #3c3c3c;
+  --vscode-statusbar: #007acc;
+  --vscode-statusbar-remote: #16825d;
+  --vscode-accent: #007acc;
+  --vscode-text: #cccccc;
+  --vscode-text-bright: #d4d4d4;
+  --vscode-text-dim: #858585;
+  --vscode-border: #474747;
+  --vscode-selection: #264f78;
+  --vscode-line-highlight: #2a2d2e;
+  --vscode-button: #0e639c;
+  --vscode-button-hover: #1177bb;
+  --vscode-input-bg: #3c3c3c;
+  --vscode-input-border: #3c3c3c;
+}
+
+body {
+  background-color: var(--vscode-bg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* Custom scrollbar - VS Code style */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e2e;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #45475a;
-  border-radius: 4px;
+  background: rgba(121, 121, 121, 0.4);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #585b70;
+  background: rgba(100, 100, 100, 0.7);
 }
 
-/* Custom cursor styles */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Editor font */
+.editor-font {
+  font-family: 'Cascadia Code', 'Fira Code', Consolas, 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  tab-size: 4;
+}
+
+/* VS Code button styles */
+.vscode-button {
+  background-color: var(--vscode-button);
+  color: white;
+  border: none;
+  padding: 4px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.vscode-button:hover {
+  background-color: var(--vscode-button-hover);
+}
+
+/* VS Code input */
+.vscode-input {
+  background-color: var(--vscode-input-bg);
+  border: 1px solid var(--vscode-input-border);
+  color: var(--vscode-text);
+  padding: 4px 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.vscode-input:focus {
+  border-color: var(--vscode-accent);
+}
+
+/* Tab styles */
+.vscode-tab {
+  background-color: var(--vscode-sidebar);
+  border-right: 1px solid var(--vscode-bg);
+  color: var(--vscode-text-dim);
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vscode-tab.active {
+  background-color: var(--vscode-bg);
+  color: var(--vscode-text-bright);
+}
+
+/* Activity bar icons */
+.activity-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vscode-text-dim);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: color 0.1s;
+}
+
+.activity-icon:hover {
+  color: var(--vscode-text);
+}
+
+.activity-icon.active {
+  color: var(--vscode-text);
+  border-left-color: var(--vscode-accent);
+}
+
+/* Line numbers gutter */
+.line-numbers {
+  color: var(--vscode-text-dim);
+  text-align: right;
+  padding-right: 16px;
+  user-select: none;
+  font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--vscode-selection);
+}
+
+/* Remote cursor styles */
 .remote-cursor {
   position: absolute;
   pointer-events: none;
@@ -36,10 +158,11 @@
   position: absolute;
   top: -1.4em;
   left: 0;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   padding: 1px 4px;
-  border-radius: 3px;
+  border-radius: 2px;
   white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 @keyframes blink {
@@ -47,75 +170,126 @@
   50% { opacity: 0.5; }
 }
 
-/* Markdown preview styles */
+/* Markdown preview styles - VS Code themed */
 .markdown-preview {
   line-height: 1.6;
+  color: var(--vscode-text);
+  padding: 16px 24px;
 }
 
 .markdown-preview h1 {
-  @apply text-3xl font-bold mb-4 mt-6 text-slate-100;
+  font-size: 2em;
+  font-weight: 600;
+  margin: 24px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--vscode-border);
+  color: var(--vscode-text-bright);
 }
 
 .markdown-preview h2 {
-  @apply text-2xl font-semibold mb-3 mt-5 text-slate-200;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 20px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--vscode-border);
+  color: var(--vscode-text-bright);
 }
 
 .markdown-preview h3 {
-  @apply text-xl font-medium mb-2 mt-4 text-slate-200;
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: var(--vscode-text-bright);
 }
 
 .markdown-preview p {
-  @apply mb-4 text-slate-300;
+  margin-bottom: 16px;
 }
 
 .markdown-preview ul, .markdown-preview ol {
-  @apply ml-6 mb-4 text-slate-300;
+  margin-left: 24px;
+  margin-bottom: 16px;
 }
 
 .markdown-preview li {
-  @apply mb-1;
+  margin-bottom: 4px;
 }
 
 .markdown-preview ul {
-  @apply list-disc;
+  list-style-type: disc;
 }
 
 .markdown-preview ol {
-  @apply list-decimal;
+  list-style-type: decimal;
 }
 
 .markdown-preview code {
-  @apply bg-slate-800 px-1.5 py-0.5 rounded text-pink-400 font-mono text-sm;
+  background-color: rgba(110, 118, 129, 0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 0.9em;
+  color: #ce9178;
 }
 
 .markdown-preview pre {
-  @apply bg-slate-800 p-4 rounded-lg mb-4 overflow-x-auto;
+  background-color: #2d2d2d;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  border: 1px solid var(--vscode-border);
 }
 
 .markdown-preview pre code {
-  @apply bg-transparent px-0 py-0;
+  background: transparent;
+  padding: 0;
+  color: var(--vscode-text);
 }
 
 .markdown-preview blockquote {
-  @apply border-l-4 border-indigo-500 pl-4 italic text-slate-400 my-4;
+  border-left: 4px solid var(--vscode-accent);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: var(--vscode-text-dim);
+  font-style: italic;
 }
 
 .markdown-preview a {
-  @apply text-indigo-400 hover:text-indigo-300 underline;
+  color: #3794ff;
+  text-decoration: none;
+}
+
+.markdown-preview a:hover {
+  text-decoration: underline;
 }
 
 .markdown-preview hr {
-  @apply border-slate-700 my-6;
+  border: none;
+  border-top: 1px solid var(--vscode-border);
+  margin: 24px 0;
 }
 
 .markdown-preview table {
-  @apply w-full mb-4 border-collapse;
+  width: 100%;
+  margin-bottom: 16px;
+  border-collapse: collapse;
 }
 
 .markdown-preview th, .markdown-preview td {
-  @apply border border-slate-700 px-3 py-2 text-left;
+  border: 1px solid var(--vscode-border);
+  padding: 8px 12px;
+  text-align: left;
 }
 
 .markdown-preview th {
-  @apply bg-slate-800 font-semibold;
+  background-color: var(--vscode-sidebar);
+  font-weight: 600;
+}
+
+/* Minimap placeholder */
+.minimap {
+  background-color: var(--vscode-bg);
+  width: 60px;
+  opacity: 0.7;
 }

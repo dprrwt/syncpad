@@ -16,94 +16,200 @@ export default function LandingPage({ onCreateRoom, onJoinRoom }: LandingPagePro
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundColor: '#1e1e1e' }}
+    >
       <div className="max-w-md w-full">
-        {/* Logo & Title */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-6 shadow-2xl shadow-indigo-500/25">
-            <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        {/* VS Code Style Logo */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-24 h-24 mb-6 relative">
+            {/* VS Code-like logo */}
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <polygon 
+                points="50,5 95,25 95,75 50,95 5,75 5,25" 
+                fill="#007acc"
+                opacity="0.9"
+              />
+              <polygon 
+                points="50,15 85,30 85,70 50,85 15,70 15,30" 
+                fill="#1e1e1e"
+              />
+              <text 
+                x="50" 
+                y="58" 
+                textAnchor="middle" 
+                fill="#cccccc" 
+                fontSize="24" 
+                fontFamily="Consolas, monospace"
+                fontWeight="bold"
+              >
+                {'</>'}
+              </text>
             </svg>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-3">SyncPad</h1>
-          <p className="text-slate-400 text-lg">Real-time collaborative text editor</p>
-          <p className="text-slate-500 text-sm mt-2">No account needed • Peer-to-peer • Instant sync</p>
+          <h1 
+            className="text-4xl font-light mb-2"
+            style={{ color: '#cccccc', fontFamily: "'Segoe UI', sans-serif" }}
+          >
+            SyncPad
+          </h1>
+          <p style={{ color: '#858585' }}>
+            Real-time collaborative code editor
+          </p>
         </div>
 
-        {/* Actions Card */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 shadow-xl">
-          {/* Create Room */}
+        {/* Main Card - VS Code Welcome Tab Style */}
+        <div 
+          className="rounded-lg p-8"
+          style={{ 
+            backgroundColor: '#252526',
+            border: '1px solid #3c3c3c'
+          }}
+        >
+          {/* Start Section */}
+          <h2 
+            className="text-sm font-semibold uppercase tracking-wider mb-4"
+            style={{ color: '#007acc' }}
+          >
+            Start
+          </h2>
+          
           <button
             onClick={onCreateRoom}
-            className="w-full py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-3 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02]"
+            className="w-full py-3 px-4 rounded mb-6 flex items-center gap-3 transition-colors text-left group"
+            style={{ 
+              backgroundColor: '#0e639c',
+              color: '#ffffff'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1177bb'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#0e639c'}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            Create New Room
+            <div>
+              <div className="font-medium">New Room</div>
+              <div className="text-xs opacity-75">Create a new collaborative session</div>
+            </div>
           </button>
 
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-slate-700"></div>
-            <span className="px-4 text-slate-500 text-sm">or join existing</span>
-            <div className="flex-1 border-t border-slate-700"></div>
-          </div>
+          {/* Recent Section */}
+          <h2 
+            className="text-sm font-semibold uppercase tracking-wider mb-4"
+            style={{ color: '#007acc' }}
+          >
+            Join
+          </h2>
 
-          {/* Join Room */}
-          <form onSubmit={handleJoin} className="space-y-4">
-            <input
-              type="text"
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              placeholder="Enter room code"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-            />
+          <form onSubmit={handleJoin} className="space-y-3">
+            <div className="relative">
+              <input
+                type="text"
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value)}
+                placeholder="Enter room code or paste link..."
+                className="vscode-input w-full py-2.5"
+                style={{
+                  backgroundColor: '#3c3c3c',
+                  border: '1px solid #3c3c3c',
+                  color: '#cccccc'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#007acc'}
+                onBlur={(e) => e.currentTarget.style.borderColor = '#3c3c3c'}
+              />
+            </div>
             <button
               type="submit"
               disabled={!joinCode.trim()}
-              className="w-full py-3 px-6 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 rounded flex items-center justify-center gap-2 transition-all"
+              style={{ 
+                backgroundColor: joinCode.trim() ? '#3c3c3c' : '#2d2d2d',
+                color: joinCode.trim() ? '#cccccc' : '#6e6e6e',
+                cursor: joinCode.trim() ? 'pointer' : 'not-allowed'
+              }}
+              onMouseEnter={(e) => { if (joinCode.trim()) e.currentTarget.style.backgroundColor = '#4a4a4a' }}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = joinCode.trim() ? '#3c3c3c' : '#2d2d2d'}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14" />
               </svg>
               Join Room
             </button>
           </form>
+
+          {/* Divider */}
+          <div 
+            className="my-6"
+            style={{ borderTop: '1px solid #3c3c3c' }}
+          />
+
+          {/* Learn Section */}
+          <h2 
+            className="text-sm font-semibold uppercase tracking-wider mb-4"
+            style={{ color: '#007acc' }}
+          >
+            Features
+          </h2>
+
+          <div className="space-y-2">
+            {[
+              { icon: '⚡', text: 'Real-time sync via Yjs CRDT', color: '#dcdcaa' },
+              { icon: '🔒', text: 'End-to-end encrypted', color: '#4ec9b0' },
+              { icon: '👥', text: 'See collaborators live', color: '#9cdcfe' },
+              { icon: '📝', text: 'Markdown preview', color: '#ce9178' },
+            ].map((feature, i) => (
+              <div 
+                key={i}
+                className="flex items-center gap-3 py-1.5 px-2 rounded hover:bg-white/5 transition-colors"
+              >
+                <span>{feature.icon}</span>
+                <span style={{ color: feature.color }} className="text-sm">{feature.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Features */}
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-          <div className="p-4">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <p className="text-xs text-slate-400">Instant</p>
-          </div>
-          <div className="p-4">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <p className="text-xs text-slate-400">Encrypted</p>
-          </div>
-          <div className="p-4">
-            <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-purple-500/10 flex items-center justify-center">
-              <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-            <p className="text-xs text-slate-400">P2P Sync</p>
-          </div>
+        {/* Footer - VS Code style */}
+        <div 
+          className="mt-6 flex items-center justify-center gap-4 text-xs"
+          style={{ color: '#6e6e6e' }}
+        >
+          <span>v1.0.0</span>
+          <span>•</span>
+          <a 
+            href="https://github.com/dprrwt/syncpad" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+            style={{ color: '#3794ff' }}
+          >
+            GitHub
+          </a>
+          <span>•</span>
+          <span>Built with Yjs</span>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-slate-600 text-xs mt-8">
-          Built with Yjs + WebRTC • No server storage
-        </p>
+        {/* Keyboard hint */}
+        <div 
+          className="mt-4 text-center text-xs"
+          style={{ color: '#4a4a4a' }}
+        >
+          <kbd 
+            className="px-2 py-0.5 rounded text-xs"
+            style={{ backgroundColor: '#3c3c3c', color: '#858585' }}
+          >
+            Ctrl
+          </kbd>
+          {' + '}
+          <kbd 
+            className="px-2 py-0.5 rounded text-xs"
+            style={{ backgroundColor: '#3c3c3c', color: '#858585' }}
+          >
+            N
+          </kbd>
+          {' to create new room'}
+        </div>
       </div>
     </div>
   )
